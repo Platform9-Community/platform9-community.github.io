@@ -1,8 +1,8 @@
 {
-  "slug": "pf9-paste-extension",
-  "name": "Platform9 noVNC Console Paste Extension",
+  "slug": "pf9-console-extension",
+  "name": "Platform9 Console Helper Extension",
   "type": "application",
-  "description": "Chrome extension that pastes text into noVNC console sessions by replaying keystrokes — with 1Password integration, saved snippets, and special key support.",
+  "description": "Chrome extension that helps with noVNC console sessions by replaying keystrokes — with 1Password integration, saved snippets, and special key support.",
   "icon": "/icons/pcd.svg",
   "tags": ["chrome-extension", "novnc", "console", "1password"],
   "category": "tools-utilities",
