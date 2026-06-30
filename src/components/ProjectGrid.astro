@@ -1,0 +1,140 @@
+---
+import type { Project } from '../types/index';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  projects: Project[];
+  showFilters?: boolean;
+}
+
+const { projects, showFilters = false } = Astro.props;
+---
+
+{showFilters && (
+  <div id="filter-bar" class="flex flex-wrap gap-3 mb-6 items-center">
+    <select
+      id="filter-type"
+      class="text-sm border border-border rounded-lg px-3 py-2 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-blue"
+      aria-label="Filter by type"
+    >
+      <option value="">All Types</option>
+      <option value="project">Projects</option>
+      <option value="application">Applications</option>
+    </select>
+
+    <select
+      id="filter-category"
+      class="text-sm border border-border rounded-lg px-3 py-2 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-blue"
+      aria-label="Filter by category"
+    >
+      <option value="">All Categories</option>
+      {[...new Set(projects.map(p => p.category))].map(cat => (
+        <option value={cat}>{cat.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
+      ))}
+    </select>
+
+    <select
+      id="sort-order"
+      class="text-sm border border-border rounded-lg px-3 py-2 bg-white text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-blue"
+      aria-label="Sort projects"
+    >
+      <option value="stars">Most Stars</option>
+      <option value="downloads">Most Downloads</option>
+      <option value="updated">Recently Updated</option>
+    </select>
+
+    <p id="result-count" class="text-sm text-text-muted ml-auto">
+      {projects.length} projects
+    </p>
+  </div>
+)}
+
+{projects.length === 0 && !showFilters ? (
+  <div class="text-center py-20 text-text-muted">
+    <p class="text-lg">No projects yet.</p>
+    <a href="/contribute" class="mt-4 inline-block text-brand-blue hover:text-blue-700 font-medium transition-colors">
+      Be the first to contribute one →
+    </a>
+  </div>
+) : (
+  <>
+    <div
+      id="project-grid"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+    >
+      {projects.map(project => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+
+    <p
+      id="no-results"
+      class="hidden text-center text-text-muted py-16 text-lg"
+      aria-live="polite"
+    >
+      No projects match your filters.
+    </p>
+  </>
+)}
+
+{showFilters && (
+  <script>
+    const grid = document.getElementById('project-grid') as HTMLElement;
+    const noResults = document.getElementById('no-results') as HTMLElement;
+    const countEl = document.getElementById('result-count') as HTMLElement;
+    const typeSelect = document.getElementById('filter-type') as HTMLSelectElement;
+    const categorySelect = document.getElementById('filter-category') as HTMLSelectElement;
+    const sortSelect = document.getElementById('sort-order') as HTMLSelectElement;
+
+    const cards = Array.from(grid.querySelectorAll('article')) as HTMLElement[];
+
+    function applyFilters() {
+      const type = typeSelect.value;
+      const cat = categorySelect.value;
+      const sort = sortSelect.value;
+
+      let visible = cards.filter(card => {
+        if (type && card.dataset.type !== type) return false;
+        if (cat && card.dataset.category !== cat) return false;
+        return true;
+      });
+
+      visible.sort((a, b) => {
+        if (sort === 'stars') return Number(b.dataset.stars) - Number(a.dataset.stars);
+        if (sort === 'downloads') return Number(b.dataset.downloads) - Number(a.dataset.downloads);
+        if (sort === 'updated') return new Date(b.dataset.updated!).getTime() - new Date(a.dataset.updated!).getTime();
+        return 0;
+      });
+
+      cards.forEach(c => c.style.display = 'none');
+      visible.forEach(c => {
+        c.style.display = '';
+        grid.appendChild(c);
+      });
+
+      const hasResults = visible.length > 0;
+      noResults.classList.toggle('hidden', hasResults);
+      grid.classList.toggle('hidden', !hasResults);
+      countEl.textContent = `${visible.length} project${visible.length === 1 ? '' : 's'}`;
+
+      const params = new URLSearchParams(location.search);
+      if (type) params.set('type', type); else params.delete('type');
+      if (cat) params.set('category', cat); else params.delete('category');
+      params.set('sort', sort);
+      history.replaceState(null, '', `${location.pathname}?${params}`);
+    }
+
+    // Initialize from URL params
+    const params = new URLSearchParams(location.search);
+    if (params.get('type')) typeSelect.value = params.get('type')!;
+    if (params.get('category')) categorySelect.value = params.get('category')!;
+    if (params.get('sort')) sortSelect.value = params.get('sort')!;
+
+    typeSelect.addEventListener('change', applyFilters);
+    categorySelect.addEventListener('change', applyFilters);
+    sortSelect.addEventListener('change', applyFilters);
+
+    // Always run on load so empty-state and count are correct from the start
+    applyFilters();
+  </script>
+)}

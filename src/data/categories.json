@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "automation-iac",
+    "name": "Automation & IaC",
+    "icon": "Box",
+    "color": "#1B6FE8",
+    "projectCount": 0
+  },
+  {
+    "slug": "monitoring-observability",
+    "name": "Monitoring & Observability",
+    "icon": "Monitor",
+    "color": "#16A34A",
+    "projectCount": 0
+  },
+  {
+    "slug": "security",
+    "name": "Security",
+    "icon": "ShieldPlus",
+    "color": "#7C3AED",
+    "projectCount": 0
+  },
+  {
+    "slug": "networking",
+    "name": "Networking",
+    "icon": "Network",
+    "color": "#D97706",
+    "projectCount": 0
+  },
+  {
+    "slug": "tools-utilities",
+    "name": "Tools & Utilities",
+    "icon": "Wrench",
+    "color": "#0891B2",
+    "projectCount": 0
+  }
+]

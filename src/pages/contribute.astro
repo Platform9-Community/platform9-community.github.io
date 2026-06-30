@@ -1,0 +1,273 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getAllCategories } from '../lib/data';
+import { Send, CircleCheck } from '@lucide/astro';
+
+const categories = getAllCategories();
+---
+
+<BaseLayout title="Contribute" description="Submit your Platform9 PCD project to the community portal for review and publication.">
+  <div class="max-w-[1280px] mx-auto px-6 py-12">
+
+    <!-- Page header -->
+    <div class="mb-10">
+      <h1 class="text-3xl font-bold text-text-primary mb-3">Share Your Project with the Community</h1>
+      <p class="text-text-secondary max-w-2xl">
+        Have a script, operator, integration, or tool that extends Platform9 PCD? Submit it here.
+        The Platform9 team reviews every submission before it's published — so the community always gets quality, vetted resources.
+      </p>
+    </div>
+
+    <!-- Two-column layout -->
+    <div class="flex flex-col lg:flex-row gap-10">
+
+      <!-- Submission form (left, ~65%) -->
+      <div class="flex-1 min-w-0">
+        <div class="bg-white rounded-xl border border-border shadow-sm p-8">
+          <h2 class="text-lg font-semibold text-text-primary mb-6">Project Details</h2>
+
+          <form id="submit-form" novalidate class="space-y-5">
+
+            <div>
+              <label for="proj-name" class="block text-sm font-medium text-text-primary mb-1.5">
+                Project Name <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="proj-name"
+                type="text"
+                required
+                placeholder="e.g. PCD Terraform Provider"
+                class="w-full border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand-blue"
+              />
+            </div>
+
+            <div>
+              <label for="proj-desc" class="block text-sm font-medium text-text-primary mb-1.5">
+                Short Description <span class="text-red-500">*</span>
+              </label>
+              <textarea
+                id="proj-desc"
+                required
+                maxlength="150"
+                rows="3"
+                placeholder="A short description of what your project does (max 150 characters)."
+                class="w-full border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand-blue resize-none"
+              ></textarea>
+              <p class="text-xs text-text-muted mt-1"><span id="char-count">0</span>/150 characters</p>
+            </div>
+
+            <div>
+              <label for="proj-repo" class="block text-sm font-medium text-text-primary mb-1.5">
+                GitHub Repository URL <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="proj-repo"
+                type="url"
+                required
+                placeholder="https://github.com/yourorg/your-project"
+                class="w-full border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand-blue"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="proj-type" class="block text-sm font-medium text-text-primary mb-1.5">
+                  Type <span class="text-red-500">*</span>
+                </label>
+                <select
+                  id="proj-type"
+                  required
+                  class="w-full border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                >
+                  <option value="">Select type…</option>
+                  <option value="project">Project</option>
+                  <option value="application">Application</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="proj-category" class="block text-sm font-medium text-text-primary mb-1.5">
+                  Category <span class="text-red-500">*</span>
+                </label>
+                <select
+                  id="proj-category"
+                  required
+                  class="w-full border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                >
+                  <option value="">Select category…</option>
+                  {categories.map(cat => (
+                    <option value={cat.slug}>{cat.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="proj-tags" class="block text-sm font-medium text-text-primary mb-1.5">
+                Tags
+              </label>
+              <input
+                id="proj-tags"
+                type="text"
+                placeholder="kubernetes, terraform, monitoring (comma-separated)"
+                class="w-full border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand-blue"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="proj-author" class="block text-sm font-medium text-text-primary mb-1.5">
+                  Your GitHub Username <span class="text-red-500">*</span>
+                </label>
+                <input
+                  id="proj-author"
+                  type="text"
+                  required
+                  placeholder="yourusername"
+                  class="w-full border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                />
+              </div>
+
+              <div>
+                <label for="proj-pcd" class="block text-sm font-medium text-text-primary mb-1.5">
+                  PCD Compatibility
+                </label>
+                <input
+                  id="proj-pcd"
+                  type="text"
+                  placeholder="e.g. PCD 6.x, 7.x"
+                  class="w-full border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                />
+              </div>
+            </div>
+
+            <p id="form-error" class="hidden text-sm text-red-600">Please fill in all required fields.</p>
+
+            <div class="pt-2">
+              <button
+                type="submit"
+                class="inline-flex items-center gap-2 bg-brand-blue text-white rounded-lg px-6 py-2.5 font-semibold text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 transition-colors"
+              >
+                <Send size={16} aria-hidden="true" />
+                Submit via GitHub Issue
+              </button>
+              <p class="text-xs text-text-muted mt-2.5">
+                Clicking submit opens a pre-filled GitHub issue. You'll need a GitHub account to post it.
+              </p>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- Sidebar (right, ~35%) -->
+      <div class="lg:w-80 xl:w-96 shrink-0 space-y-6">
+
+        <!-- How it works -->
+        <div class="bg-white rounded-xl border border-border shadow-sm p-6">
+          <h2 class="text-base font-semibold text-text-primary mb-5">How it works</h2>
+          <ol class="space-y-5">
+            <li class="flex gap-3">
+              <div class="flex-shrink-0 w-7 h-7 rounded-full bg-tag-bg flex items-center justify-center text-xs font-bold text-tag-text">1</div>
+              <div>
+                <p class="text-sm font-medium text-text-primary">Fill out the form</p>
+                <p class="text-xs text-text-secondary mt-0.5">Your submission opens as a structured GitHub Issue — no forking required.</p>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <div class="flex-shrink-0 w-7 h-7 rounded-full bg-tag-bg flex items-center justify-center text-xs font-bold text-tag-text">2</div>
+              <div>
+                <p class="text-sm font-medium text-text-primary">Platform9 team reviews</p>
+                <p class="text-xs text-text-secondary mt-0.5">Our team reviews within 5 business days and may ask follow-up questions on the issue.</p>
+              </div>
+            </li>
+            <li class="flex gap-3">
+              <div class="flex-shrink-0 w-7 h-7 rounded-full bg-tag-bg flex items-center justify-center text-xs font-bold text-tag-text">3</div>
+              <div>
+                <p class="text-sm font-medium text-text-primary">Your project goes live</p>
+                <p class="text-xs text-text-secondary mt-0.5">Approved projects are published to the community portal by the Platform9 team.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <!-- Requirements -->
+        <div class="bg-surface-muted rounded-xl border border-border p-6">
+          <h2 class="text-base font-semibold text-text-primary mb-4">Requirements</h2>
+          <ul class="space-y-2.5">
+            {[
+              'Public GitHub repository',
+              'README with installation instructions',
+              'Open-source license (MIT, Apache 2.0, or similar)',
+              'Genuinely useful to PCD users',
+              'Accurate description, no marketing language',
+            ].map(req => (
+              <li class="flex items-start gap-2 text-sm text-text-secondary">
+                <CircleCheck size={14} class="text-green-600 mt-0.5 shrink-0" aria-hidden="true" />
+                {req}
+              </li>
+            ))}
+          </ul>
+          <p class="text-xs text-text-muted mt-4">
+            Questions? Reach out in the{' '}
+            <a href="https://platform9.com/community" class="text-brand-blue hover:underline">Platform9 Community Slack</a>.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('submit-form') as HTMLFormElement;
+  const descEl = document.getElementById('proj-desc') as HTMLTextAreaElement;
+  const charCount = document.getElementById('char-count') as HTMLElement;
+  const errorEl = document.getElementById('form-error') as HTMLElement;
+
+  descEl.addEventListener('input', () => {
+    charCount.textContent = String(descEl.value.length);
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = (document.getElementById('proj-name') as HTMLInputElement).value.trim();
+    const desc = descEl.value.trim();
+    const repo = (document.getElementById('proj-repo') as HTMLInputElement).value.trim();
+    const type = (document.getElementById('proj-type') as HTMLSelectElement).value;
+    const category = (document.getElementById('proj-category') as HTMLSelectElement).value;
+    const tags = (document.getElementById('proj-tags') as HTMLInputElement).value.trim();
+    const author = (document.getElementById('proj-author') as HTMLInputElement).value.trim();
+    const pcd = (document.getElementById('proj-pcd') as HTMLInputElement).value.trim();
+
+    if (!name || !desc || !repo || !type || !category || !author) {
+      errorEl.classList.remove('hidden');
+      return;
+    }
+    errorEl.classList.add('hidden');
+
+    const body = [
+      '## Project Submission',
+      '',
+      `**Name:** ${name}`,
+      `**Type:** ${type}`,
+      `**Description:** ${desc}`,
+      `**GitHub URL:** ${repo}`,
+      `**Category:** ${category}`,
+      `**Tags:** ${tags || '—'}`,
+      `**Author (GitHub username):** ${author}`,
+      `**PCD Compatibility:** ${pcd || '—'}`,
+      '',
+      '---',
+      '*Submitted via the Platform9 Community portal. Please do not edit the fields above.*',
+    ].join('\n');
+
+    const issueUrl = new URL('https://github.com/platform9-community/platform9-community.github.com/issues/new');
+    issueUrl.searchParams.set('title', `Project Submission: ${name}`);
+    issueUrl.searchParams.set('body', body);
+    issueUrl.searchParams.set('labels', 'submission');
+
+    window.open(issueUrl.toString(), '_blank', 'noopener,noreferrer');
+  });
+</script>

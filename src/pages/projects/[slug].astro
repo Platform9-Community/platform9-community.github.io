@@ -1,0 +1,136 @@
+---
+import { marked } from 'marked';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllProjects, getProjectsByCategory, relativeTime, formatDownloads } from '../../lib/data';
+import { Star, Download, ExternalLink, ArrowLeft } from '@lucide/astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+export async function getStaticPaths() {
+  const projects = getAllProjects();
+  return projects.map(project => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const readmeHtml = project.readme ? marked(project.readme) : '';
+const related = getProjectsByCategory(project.category)
+  .filter(p => p.slug !== project.slug)
+  .slice(0, 3);
+---
+
+<BaseLayout title={project.name} description={project.description}>
+  <div class="max-w-[1280px] mx-auto px-6 py-10">
+    <!-- Back link -->
+    <a href="/projects" class="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-brand-blue transition-colors mb-6">
+      <ArrowLeft size={14} aria-hidden="true" />
+      Back to Projects
+    </a>
+
+    <div class="flex flex-col lg:flex-row gap-10">
+      <!-- Main content -->
+      <div class="flex-1 min-w-0">
+        <!-- Header -->
+        <div class="flex items-start gap-5 mb-8">
+          <div class="w-16 h-16 rounded-xl bg-surface-muted border border-border flex items-center justify-center shrink-0">
+            <img src={project.icon} alt="" width="40" height="40" onerror="this.style.display='none'" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-center gap-3 mb-2">
+              <h1 class="text-2xl font-bold text-text-primary">{project.name}</h1>
+              <span class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-tag-bg text-tag-text capitalize">
+                {project.type}
+              </span>
+            </div>
+            <p class="text-text-secondary">{project.description}</p>
+            <div class="flex flex-wrap items-center gap-4 mt-3">
+              <div class="flex items-center gap-1.5 text-sm text-text-muted">
+                <Star size={14} aria-hidden="true" />
+                <span>{project.stars} stars</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-sm text-text-muted">
+                <Download size={14} aria-hidden="true" />
+                <span>{formatDownloads(project.downloads)} downloads</span>
+              </div>
+              <span class="text-sm text-text-muted">Updated {relativeTime(project.updatedAt)}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          {project.tags.map(tag => (
+            <span class="px-3 py-1 text-sm font-medium rounded-full bg-tag-bg text-tag-text">{tag}</span>
+          ))}
+        </div>
+
+        <!-- Repo link -->
+        <a
+          href={project.repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-blue text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors mb-8"
+        >
+          View on GitHub
+          <ExternalLink size={14} aria-hidden="true" />
+        </a>
+
+        <!-- README -->
+        {readmeHtml && (
+          <div class="bg-white rounded-xl border border-border p-8">
+            <div class="prose prose-slate max-w-none" set:html={readmeHtml} />
+          </div>
+        )}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:w-72 xl:w-80 shrink-0 space-y-6">
+        <!-- Author -->
+        <div class="bg-white rounded-xl border border-border p-5">
+          <h3 class="text-sm font-semibold text-text-primary mb-3">Author</h3>
+          <div class="flex items-center gap-3">
+            <img
+              src={project.author.avatar}
+              alt={project.author.name}
+              width="36"
+              height="36"
+              class="rounded-full border border-border"
+              onerror="this.style.display='none'"
+            />
+            <span class="text-sm text-text-secondary">{project.author.name}</span>
+          </div>
+        </div>
+
+        <!-- Category -->
+        <div class="bg-white rounded-xl border border-border p-5">
+          <h3 class="text-sm font-semibold text-text-primary mb-3">Category</h3>
+          <a
+            href={`/categories/${project.category}`}
+            class="text-sm text-brand-blue hover:text-blue-700 font-medium capitalize transition-colors"
+          >
+            {project.category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+          </a>
+        </div>
+
+        <!-- Related projects -->
+        {related.length > 0 && (
+          <div>
+            <h3 class="text-sm font-semibold text-text-primary mb-3">Related Projects</h3>
+            <div class="space-y-3">
+              {related.map(p => (
+                <a
+                  href={`/projects/${p.slug}`}
+                  class="block bg-white rounded-xl border border-border p-4 hover:border-brand-blue transition-colors"
+                >
+                  <p class="text-sm font-medium text-text-primary">{p.name}</p>
+                  <p class="text-xs text-text-muted mt-1 line-clamp-2">{p.description}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

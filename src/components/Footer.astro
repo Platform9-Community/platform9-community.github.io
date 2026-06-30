@@ -1,0 +1,34 @@
+---
+import { Package, Users, Download, Globe } from '@lucide/astro';
+import { getSiteStats } from '../lib/data';
+
+const stats = getSiteStats();
+
+const statItems = [
+  { icon: Package, value: stats.projectCount, label: 'Projects' },
+  { icon: Users,   value: stats.contributorCount, label: 'Contributors' },
+  { icon: Download, value: stats.downloadCount, label: `Downloads (${stats.downloadPeriod})` },
+  { icon: Globe,   value: stats.countryCount, label: 'Countries' },
+];
+---
+
+<footer class="bg-surface border-t border-border">
+  <div class="max-w-[1280px] mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-6">
+    {stats.projectCount !== '0' && (
+      <div class="flex flex-wrap gap-8">
+        {statItems.map(({ icon: Icon, value, label }) => (
+          <div class="flex items-center gap-3">
+            <Icon size={20} class="text-text-muted" aria-hidden="true" />
+            <div>
+              <p class="text-xl font-bold text-text-primary leading-none">{value}</p>
+              <p class="text-xs text-text-muted mt-0.5">{label}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+    <p class="text-sm text-text-secondary">
+      Built with ❤️ by the Platform9 Community
+    </p>
+  </div>
+</footer>

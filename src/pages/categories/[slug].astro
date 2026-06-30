@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import { getAllCategories, getProjectsByCategory, getCategoryBySlug } from '../../lib/data';
+import { ArrowLeft } from '@lucide/astro';
+
+export async function getStaticPaths() {
+  const categories = getAllCategories();
+  return categories.map(category => ({
+    params: { slug: category.slug },
+    props: {
+      category,
+      projects: getProjectsByCategory(category.slug),
+    },
+  }));
+}
+
+const { category, projects } = Astro.props;
+const sorted = [...projects].sort((a, b) => b.stars - a.stars);
+---
+
+<BaseLayout
+  title={category.name}
+  description={`Browse ${category.name} projects for Platform9 Private Cloud Director.`}
+>
+  <div class="max-w-[1280px] mx-auto px-6 py-12">
+    <a href="/categories" class="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-brand-blue transition-colors mb-6">
+      <ArrowLeft size={14} aria-hidden="true" />
+      All Categories
+    </a>
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-text-primary">{category.name}</h1>
+      <p class="mt-2 text-text-secondary">{category.projectCount} projects</p>
+    </div>
+    {sorted.length > 0 ? (
+      <ProjectGrid projects={sorted} />
+    ) : (
+      <div class="text-center py-20 text-text-muted">
+        <p class="text-lg">No projects in this category yet.</p>
+        <a href="/contribute" class="mt-4 inline-block text-brand-blue hover:text-blue-700 font-medium">
+          Contribute the first one →
+        </a>
+      </div>
+    )}
+  </div>
+</BaseLayout>

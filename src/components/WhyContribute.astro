@@ -1,0 +1,29 @@
+---
+import { Check, ArrowRight } from '@lucide/astro';
+
+const reasons = [
+  'Share your PCD solutions with the community',
+  'Get visibility for your open-source work',
+  'Help other Platform9 users solve real problems',
+  'Build your reputation in the PCD ecosystem',
+];
+---
+
+<aside class="bg-surface-muted rounded-xl border border-border p-6">
+  <h3 class="font-semibold text-text-primary mb-4">Why contribute?</h3>
+  <ul class="space-y-2.5">
+    {reasons.map(reason => (
+      <li class="flex items-start gap-2.5 text-sm text-text-secondary">
+        <Check size={16} class="text-brand-blue mt-0.5 shrink-0" aria-hidden="true" />
+        {reason}
+      </li>
+    ))}
+  </ul>
+  <a
+    href="/contribute"
+    class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-blue hover:text-blue-700 transition-colors"
+  >
+    Learn how to contribute
+    <ArrowRight size={14} aria-hidden="true" />
+  </a>
+</aside>

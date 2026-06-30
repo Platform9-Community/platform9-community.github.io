@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SearchBar from '../components/SearchBar.astro';
+
+const query = Astro.url.searchParams.get('q') ?? '';
+---
+
+<BaseLayout title="Search" description="Search Platform9 community projects and applications.">
+  <div class="max-w-[1280px] mx-auto px-6 py-12">
+    <h1 class="text-3xl font-bold text-text-primary mb-6">Search</h1>
+    <div class="max-w-2xl mb-8">
+      <SearchBar initialValue={query} />
+    </div>
+
+    <div id="search-status" class="text-sm text-text-muted mb-4" aria-live="polite">
+      {query ? `Searching for "${query}"…` : 'Enter a search term above.'}
+    </div>
+
+    <div
+      id="search-results"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+    >
+    </div>
+
+    <p id="no-results" class="hidden text-center text-text-muted py-16 text-lg" aria-live="polite">
+      No results found for "<span id="no-results-query"></span>".
+    </p>
+  </div>
+</BaseLayout>
+
+<script>
+  import Fuse from 'fuse.js';
+
+  const query = new URLSearchParams(location.search).get('q') ?? '';
+  const statusEl = document.getElementById('search-status')!;
+  const resultsEl = document.getElementById('search-results')!;
+  const noResultsEl = document.getElementById('no-results')!;
+  const noResultsQuery = document.getElementById('no-results-query')!;
+
+  if (!query) {
+    statusEl.textContent = 'Enter a search term above.';
+  } else {
+    fetch('/search-index.json')
+      .then(r => r.json())
+      .then(data => {
+        const fuse = new Fuse(data, {
+          keys: [
+            { name: 'name', weight: 2 },
+            { name: 'description', weight: 1 },
+            { name: 'tags', weight: 1.5 },
+            { name: 'category', weight: 0.5 },
+          ],
+          threshold: 0.35,
+          includeScore: true,
+        });
+
+        const results = fuse.search(query).map(r => r.item);
+        statusEl.textContent = results.length
+          ? `${results.length} result${results.length === 1 ? '' : 's'} for "${query}"`
+          : '';
+
+        if (results.length === 0) {
+          noResultsQuery.textContent = query;
+          noResultsEl.classList.remove('hidden');
+        } else {
+          resultsEl.innerHTML = results
+            .map(p => `
+              <article class="bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow flex flex-col p-5 gap-4">
+                <div class="flex items-start gap-3">
+                  <div class="w-12 h-12 rounded-lg bg-surface-muted border border-border flex items-center justify-center shrink-0">
+                    <img src="${p.icon ?? ''}" alt="" width="32" height="32" onerror="this.style.display='none'" />
+                  </div>
+                  <div>
+                    <a href="/projects/${p.slug}" class="font-semibold text-text-primary hover:text-brand-blue transition-colors">
+                      ${p.name}
+                    </a>
+                    <span class="block mt-0.5 text-xs text-text-muted capitalize">${p.type}</span>
+                  </div>
+                </div>
+                <p class="text-sm text-text-secondary line-clamp-2 flex-1">${p.description}</p>
+                <div class="flex flex-wrap gap-1.5">
+                  ${(p.tags ?? []).slice(0, 3).map((t: string) =>
+                    `<span class="px-2 py-0.5 text-xs font-medium rounded-full bg-tag-bg text-tag-text">${t}</span>`
+                  ).join('')}
+                </div>
+              </article>
+            `)
+            .join('');
+        }
+      })
+      .catch(() => {
+        statusEl.textContent = 'Search unavailable. Please try again.';
+      });
+  }
+</script>

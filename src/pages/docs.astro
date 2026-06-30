@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { BookOpen, ExternalLink } from '@lucide/astro';
+---
+
+<BaseLayout title="Docs" description="Documentation for Platform9 Community.">
+  <div class="max-w-[1280px] mx-auto px-6 py-20 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-tag-bg flex items-center justify-center mx-auto mb-6">
+      <BookOpen size={28} class="text-brand-blue" aria-hidden="true" />
+    </div>
+    <h1 class="text-3xl font-bold text-text-primary mb-3">Documentation</h1>
+    <p class="text-text-secondary max-w-md mx-auto mb-8">
+      Full documentation is coming soon. In the meantime, explore the Platform9 official docs or contribute to this community.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a
+        href="https://platform9.com/docs"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-blue text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Platform9 Official Docs
+        <ExternalLink size={14} aria-hidden="true" />
+      </a>
+      <a
+        href="/contribute"
+        class="inline-flex items-center gap-2 px-5 py-2.5 border border-border bg-white text-text-primary font-semibold rounded-lg hover:border-brand-blue transition-colors"
+      >
+        Contribute a Project
+      </a>
+    </div>
+  </div>
+</BaseLayout>

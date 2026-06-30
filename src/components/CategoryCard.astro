@@ -1,0 +1,58 @@
+---
+import {
+  Box, Monitor, ShieldPlus, Network, Wrench, LayoutGrid,
+} from '@lucide/astro';
+import type { Category } from '../types/index';
+
+interface Props {
+  category: Category;
+  showAll?: boolean;
+}
+
+const { category, showAll = false } = Astro.props;
+
+const iconMap: Record<string, any> = {
+  Box,
+  Monitor,
+  ShieldPlus,
+  Network,
+  Wrench,
+  LayoutGrid,
+};
+
+const Icon = iconMap[category.icon] ?? LayoutGrid;
+---
+
+{showAll ? (
+  <a
+    href="/categories"
+    class="flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-dashed border-border bg-white hover:border-brand-blue transition-colors cursor-pointer text-center group"
+  >
+    <div class="w-12 h-12 rounded-xl bg-surface-muted flex items-center justify-center">
+      <LayoutGrid size={24} class="text-text-muted group-hover:text-brand-blue transition-colors" />
+    </div>
+    <div>
+      <p class="font-semibold text-sm text-text-primary">View all categories</p>
+    </div>
+  </a>
+) : (
+  <a
+    href={`/categories/${category.slug}`}
+    class="flex flex-col items-center gap-3 p-5 rounded-xl border border-border bg-white hover:border-brand-blue hover:shadow-sm transition-all cursor-pointer text-center group"
+  >
+    <div
+      class="w-12 h-12 rounded-xl flex items-center justify-center"
+      style={`background-color: ${category.color}18`}
+    >
+      <Icon
+        size={24}
+        style={`color: ${category.color}`}
+        aria-hidden="true"
+      />
+    </div>
+    <div>
+      <p class="font-semibold text-sm text-text-primary leading-snug">{category.name}</p>
+      <p class="text-xs text-text-muted mt-0.5">{category.projectCount} projects</p>
+    </div>
+  </a>
+)}

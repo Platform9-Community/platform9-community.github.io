@@ -1,0 +1,41 @@
+---
+import { Search } from '@lucide/astro';
+
+interface Props {
+  initialValue?: string;
+  className?: string;
+}
+
+const { initialValue = '', className = '' } = Astro.props;
+---
+
+<form
+  action="/search"
+  method="get"
+  class:list={['flex items-center rounded-xl border border-border bg-white shadow-lg overflow-hidden', className]}
+  role="search"
+>
+  <span class="pl-4 text-text-muted flex-shrink-0" aria-hidden="true">
+    <Search size={18} />
+  </span>
+  <input
+    name="q"
+    type="search"
+    value={initialValue}
+    placeholder="Search projects, applications, and more..."
+    class="flex-1 px-4 py-3 text-sm text-text-primary outline-none bg-transparent placeholder:text-text-muted"
+    aria-label="Search projects and applications"
+  />
+  <button
+    type="submit"
+    class="bg-brand-blue text-white px-5 py-3 text-sm font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
+  >
+    Search
+  </button>
+  <a
+    href="/search"
+    class="px-4 text-sm text-text-secondary hover:text-brand-blue transition-colors whitespace-nowrap hidden sm:block"
+  >
+    Advanced Search
+  </a>
+</form>

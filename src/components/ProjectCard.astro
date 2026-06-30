@@ -1,0 +1,75 @@
+---
+import { Star, Download } from '@lucide/astro';
+import type { Project } from '../types/index';
+import { relativeTime, formatDownloads } from '../lib/data';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const visibleTags = project.tags.slice(0, 3);
+const updated = relativeTime(project.updatedAt);
+---
+
+<article
+  class="bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow flex flex-col p-5 gap-4"
+  data-type={project.type}
+  data-category={project.category}
+  data-stars={project.stars}
+  data-downloads={project.downloads}
+  data-updated={project.updatedAt}
+  data-tags={project.tags.join(',')}
+>
+  <!-- Icon + Title -->
+  <div class="flex items-start gap-3">
+    <div class="w-12 h-12 rounded-lg bg-surface-muted border border-border flex items-center justify-center shrink-0 overflow-hidden">
+      <img
+        src={project.icon}
+        alt=""
+        width="32"
+        height="32"
+        loading="lazy"
+        onerror="this.style.display='none'"
+      />
+    </div>
+    <div class="min-w-0">
+      <a
+        href={`/projects/${project.slug}`}
+        class="font-semibold text-text-primary hover:text-brand-blue transition-colors leading-snug block"
+      >
+        {project.name}
+      </a>
+      <span class="inline-block mt-0.5 text-xs font-medium px-2 py-0.5 rounded-full bg-surface-muted text-text-muted capitalize">
+        {project.type}
+      </span>
+    </div>
+  </div>
+
+  <!-- Description -->
+  <p class="text-sm text-text-secondary leading-relaxed line-clamp-2 flex-1">
+    {project.description}
+  </p>
+
+  <!-- Tags -->
+  <div class="flex flex-wrap gap-1.5">
+    {visibleTags.map(tag => (
+      <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-tag-bg text-tag-text">
+        {tag}
+      </span>
+    ))}
+  </div>
+
+  <!-- Stats -->
+  <div class="flex items-center gap-3 text-xs text-text-muted border-t border-border pt-3">
+    <span class="flex items-center gap-1">
+      <Star size={12} aria-hidden="true" />
+      {project.stars}
+    </span>
+    <span class="flex items-center gap-1">
+      <Download size={12} aria-hidden="true" />
+      {formatDownloads(project.downloads)}
+    </span>
+    <span class="ml-auto">Updated {updated}</span>
+  </div>
+</article>

@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import { getAllCategories } from '../../lib/data';
+
+const categories = getAllCategories();
+---
+
+<BaseLayout title="Categories" description="Browse Platform9 community projects by category.">
+  <div class="max-w-[1280px] mx-auto px-6 py-12">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-text-primary">Categories</h1>
+      <p class="mt-2 text-text-secondary">Find projects organized by technology area.</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+      {categories.map(category => (
+        <CategoryCard category={category} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

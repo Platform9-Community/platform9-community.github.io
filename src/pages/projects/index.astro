@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import { getAllProjects } from '../../lib/data';
+
+const projects = getAllProjects().sort((a, b) => b.stars - a.stars);
+---
+
+<BaseLayout title="Projects" description="Browse all community projects for Platform9 Private Cloud Director.">
+  <div class="max-w-[1280px] mx-auto px-6 py-12">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-text-primary">Projects</h1>
+      <p class="mt-2 text-text-secondary">Browse all community projects for Platform9 Private Cloud Director.</p>
+    </div>
+    <ProjectGrid projects={projects} showFilters={true} />
+  </div>
+</BaseLayout>

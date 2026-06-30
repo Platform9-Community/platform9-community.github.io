@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import WhyContribute from '../components/WhyContribute.astro';
+import { getFeaturedProjects, getAllCategories } from '../lib/data';
+import { ArrowRight } from '@lucide/astro';
+
+const featured = getFeaturedProjects();
+const categories = getAllCategories();
+---
+
+<BaseLayout title="Home">
+  <Hero />
+
+  <!-- Main content — offset for overlapping search bar -->
+  <div class="mt-12 max-w-[1280px] mx-auto px-6 pb-16 space-y-14">
+
+    <!-- Featured Projects — only shown when there are featured projects -->
+    {featured.length > 0 && (
+      <section>
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-text-primary">Featured Projects</h2>
+          <a
+            href="/projects"
+            class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-blue hover:text-blue-700 transition-colors"
+          >
+            View all projects
+            <ArrowRight size={14} aria-hidden="true" />
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {featured.map(project => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Browse by Category + Why Contribute -->
+    <section class="flex flex-col lg:flex-row gap-8">
+      <!-- Categories (left, ~75%) -->
+      <div class="flex-1 min-w-0">
+        <h2 class="text-2xl font-bold text-text-primary mb-6">Browse by Category</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+          {categories.map(category => (
+            <CategoryCard category={category} />
+          ))}
+          <CategoryCard category={categories[0]} showAll={true} />
+        </div>
+      </div>
+
+      <!-- Why Contribute (right, ~25%) -->
+      <div class="lg:w-72 xl:w-80 shrink-0">
+        <WhyContribute />
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>

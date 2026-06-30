@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+.astro/
+ChatGPT Image Jun 30, 2026, 10_22_06 AM.png
+ChatGPT Image Jun 30, 2026, 09_06_10 AM.png
+DESIGN.md
+CLAUDE.md
+/favicon.svg
+/platform9_logo.svg
