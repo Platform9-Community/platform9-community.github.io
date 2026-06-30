@@ -263,7 +263,7 @@ const categories = getAllCategories();
       '*Submitted via the Platform9 Community portal. Please do not edit the fields above.*',
     ].join('\n');
 
-    const issueUrl = new URL('https://github.com/platform9-community/platform9-community.github.com/issues/new');
+    const issueUrl = new URL('https://github.com/Platform9-Community/platform9-community.github.io/issues/new');
     issueUrl.searchParams.set('title', `Project Submission: ${name}`);
     issueUrl.searchParams.set('body', body);
     issueUrl.searchParams.set('labels', 'submission');
