@@ -1,0 +1,18 @@
+{
+  "slug": "pcd-console-proxy",
+  "name": "PCD Console Proxy Server",
+  "type": "application",
+  "description": "A Virtual Linux appliance that proxies VM console traffic through Keystone authentication, adding security and control to PCD console access.",
+  "icon": "/icons/pcd.svg",
+  "tags": ["console", "proxy", "networking", "keystone"],
+  "category": "networking",
+  "stars": 0,
+  "downloads": 0,
+  "updatedAt": "2026-06-30T00:00:00Z",
+  "repoUrl": "https://github.com/Platform9-Community/pcd-console-proxy",
+  "author": {
+    "name": "jscott-pf9",
+    "avatar": "https://github.com/jscott-pf9.png"
+  },
+  "featured": true
+}
