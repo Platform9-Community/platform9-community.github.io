@@ -1,0 +1,18 @@
+{
+  "slug": "pcd-preinstall-validate",
+  "name": "POC Pre-Install Validation Script",
+  "type": "project",
+  "description": "Pre-installation validation script for Platform9 Private Cloud Director (PCD) hypervisor hosts.",
+  "icon": "/icons/pcd.svg",
+  "tags": ["poc", "install", "validation"],
+  "category": "tools-utilities",
+  "stars": 0,
+  "downloads": 0,
+  "updatedAt": "2026-06-30T00:00:00Z",
+  "repoUrl": "https://github.com/jscott-pf9/pcd-preinstall-validate",
+  "author": {
+    "name": "jscott-pf9",
+    "avatar": "https://github.com/jscott-pf9.png"
+  },
+  "featured": false
+}
