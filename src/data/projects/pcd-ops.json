@@ -1,0 +1,18 @@
+{
+  "slug": "pcd-ops",
+  "name": "PCD Ops",
+  "type": "application",
+  "description": "Operations dashboard for PCD — resource reclamation, capacity planning, inventory, snapshot management, and AI-assisted VM right-sizing.",
+  "icon": "/icons/pcd.svg",
+  "tags": ["operations", "dashboard", "capacity-planning", "ai", "monitoring"],
+  "category": "monitoring-observability",
+  "stars": 0,
+  "downloads": 0,
+  "updatedAt": "2026-06-30T00:00:00Z",
+  "repoUrl": "https://github.com/jscott-pf9/pcd-ops",
+  "author": {
+    "name": "jscott-pf9",
+    "avatar": "https://github.com/jscott-pf9.png"
+  },
+  "featured": true
+}
