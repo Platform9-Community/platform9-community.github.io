@@ -55,6 +55,8 @@ Write to `src/data/projects/{slug}.json`:
 }
 ```
 
+Note: `downloads` is always set to `0` here. The GitHub Actions deploy workflow runs `scripts/update-downloads.mjs` before each build, which fetches real release download counts from the GitHub API and updates all project JSON files automatically. No manual tracking needed.
+
 **c. Recalculate all counts from actual data — do not guess or increment manually**
 
 Count projects per category:
