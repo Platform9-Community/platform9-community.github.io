@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Daily refresh of GitHub star/download counts, independent of code changes.
+    - cron: '0 6 * * *'
 
 permissions:
   contents: read
@@ -30,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Update download counts
+      - name: Update star/download counts
         run: node scripts/update-downloads.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
