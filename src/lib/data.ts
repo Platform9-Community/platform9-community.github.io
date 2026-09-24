@@ -33,7 +33,10 @@ export function getCategoryBySlug(slug: string): Category | undefined {
 }
 
 export function getSiteStats(): SiteStats {
-  return siteData as SiteStats;
+  // Download total is derived from project data, which scripts/update-downloads.mjs
+  // refreshes from GitHub release counts before each build.
+  const totalDownloads = getAllProjects().reduce((sum, p) => sum + (p.downloads ?? 0), 0);
+  return { ...(siteData as SiteStats), downloadCount: formatDownloads(totalDownloads) };
 }
 
 export function relativeTime(isoDate: string): string {
