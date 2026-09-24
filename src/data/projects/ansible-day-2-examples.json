@@ -1,0 +1,23 @@
+{
+  "slug": "ansible-day-2-examples",
+  "name": "Ansible - Day 2 Examples",
+  "type": "project",
+  "description": "Community Ansible playbooks, modules, and examples for Day 2 operations on Private Cloud Director.",
+  "icon": "/icons/ansible.svg",
+  "tags": [
+    "ansible",
+    "private cloud director",
+    "community",
+    "platform9"
+  ],
+  "category": "automation-iac",
+  "stars": 0,
+  "downloads": 0,
+  "updatedAt": "2026-09-24T00:00:00Z",
+  "repoUrl": "https://github.com/Platform9-Community/ansible",
+  "author": {
+    "name": "damian-pf9",
+    "avatar": "https://github.com/damian-pf9.png"
+  },
+  "featured": false
+}
