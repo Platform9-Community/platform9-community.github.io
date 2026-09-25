@@ -17,7 +17,7 @@ If there are no open issues, tell the user there are no pending submissions and 
 
 ### 2. Present each submission
 For each issue, parse the structured body and display:
-- Name, Type, Description, GitHub URL, Category, Tags, Author, PCD Compatibility
+- Name, Type, Description, GitHub URL, Category, Tags, Screenshots, Author, PCD Compatibility
 
 Ask the user: **Approve, Skip, or Reject?**
 - **Approve** → publish it (step 3)
@@ -31,6 +31,7 @@ Before writing the file, confirm:
 - Description looks complete and not truncated (max 150 chars for the card)
 - Featured: ask if this should appear on the home page
 - Icon: choose the best match from `/public/icons/` — available icons: `pcd.svg`, `kubernetes.svg`, `openstack.svg`, `terraform.svg`, `ansible.svg`, `helm.svg`, `prometheus.svg`, `vmware.svg`
+- Screenshots (optional): if the `**Screenshots:**` field is not `—`, split it on commas and open each URL to confirm it's a real, appropriate, working image before publishing. Drop any broken or inappropriate link rather than blocking the whole submission — these are hotlinked directly from the contributor's own hosting, not copied into this repo.
 
 **b. Create the project JSON**
 Write to `src/data/projects/{slug}.json`:
@@ -51,9 +52,12 @@ Write to `src/data/projects/{slug}.json`:
     "name": "{author}",
     "avatar": "https://github.com/{author}.png"
   },
-  "featured": {true|false}
+  "featured": {true|false},
+  "screenshots": ["{url1}", "{url2}"]
 }
 ```
+
+Note: `screenshots` is optional — split the issue's `**Screenshots:**` field on commas, trim each URL, and drop the key entirely if the field is `—` or empty.
 
 Note: `downloads` is always set to `0` here. The GitHub Actions deploy workflow runs `scripts/update-downloads.mjs` before each build, which fetches real release download counts from the GitHub API and updates all project JSON files automatically. No manual tracking needed.
 

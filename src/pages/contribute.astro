@@ -114,6 +114,18 @@ const categories = getAllCategories();
               />
             </div>
 
+            <div>
+              <label for="proj-screenshots" class="block text-sm font-medium text-text-primary mb-1.5">
+                Screenshot URLs
+              </label>
+              <textarea
+                id="proj-screenshots"
+                rows="3"
+                placeholder="Paste image URLs, one per line (optional) — e.g. links to images in your repo or README"
+                class="w-full border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand-blue resize-none"
+              ></textarea>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label for="proj-author" class="block text-sm font-medium text-text-primary mb-1.5">
@@ -234,6 +246,8 @@ const categories = getAllCategories();
     const type = (document.getElementById('proj-type') as HTMLSelectElement).value;
     const category = (document.getElementById('proj-category') as HTMLSelectElement).value;
     const tags = (document.getElementById('proj-tags') as HTMLInputElement).value.trim();
+    const screenshotsRaw = (document.getElementById('proj-screenshots') as HTMLTextAreaElement).value.trim();
+    const screenshots = screenshotsRaw.split(/\n|,/).map(s => s.trim()).filter(Boolean);
     const author = (document.getElementById('proj-author') as HTMLInputElement).value.trim();
     const pcd = (document.getElementById('proj-pcd') as HTMLInputElement).value.trim();
 
@@ -252,6 +266,7 @@ const categories = getAllCategories();
       `**GitHub URL:** ${repo}`,
       `**Category:** ${category}`,
       `**Tags:** ${tags || '—'}`,
+      `**Screenshots:** ${screenshots.length ? screenshots.join(', ') : '—'}`,
       `**Author (GitHub username):** ${author}`,
       `**PCD Compatibility:** ${pcd || '—'}`,
       '',

@@ -13,6 +13,7 @@ export interface Project {
   author: { name: string; avatar: string };
   featured: boolean;
   readme?: string;
+  screenshots?: string[];
 }
 
 export interface Category {

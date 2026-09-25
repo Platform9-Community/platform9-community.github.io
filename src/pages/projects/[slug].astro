@@ -76,6 +76,20 @@ const related = getProjectsByCategory(project.category)
           <ExternalLink size={14} aria-hidden="true" />
         </a>
 
+        <!-- Screenshots -->
+        {project.screenshots && project.screenshots.length > 0 && (
+          <div class="mb-8">
+            <h2 class="text-lg font-semibold text-text-primary mb-3">Screenshots</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {project.screenshots.map(src => (
+                <a href={src} target="_blank" rel="noopener noreferrer" class="block rounded-lg overflow-hidden border border-border hover:border-brand-blue transition-colors">
+                  <img src={src} alt={`${project.name} screenshot`} loading="lazy" class="w-full h-32 object-cover" onerror="this.closest('a').style.display='none'" />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
         <!-- README -->
         {readmeHtml && (
           <div class="bg-white rounded-xl border border-border p-8">
